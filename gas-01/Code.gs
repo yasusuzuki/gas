@@ -2,7 +2,7 @@
  * SummerNoteというWISWIGエディタライブラリを使って、コメントを入力してもらう
  * 入力したコメントはGoogle Spreadsheetに保存される。
  * 保存されたコメントは、画面に順番に表示される。
- * JavaScriptは、jQueryとBootstrapを利用している
+ * JavaScriptは、jQueryとBootstrapを利用している 
 **/
 
 var gDriveFolderId = "0B1PLZxt9LkLxTl9hTHNjRUtJTWs";

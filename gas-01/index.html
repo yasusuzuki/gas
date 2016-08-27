@@ -1,0 +1,148 @@
+<html>
+<body>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js '></script>
+<script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js'></script>
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+<script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.min.js"></script>
+
+<div>
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+		<span aria-hidden="true">&times;</span>
+		<span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="div_title"></h4>
+      </div>
+      <div class="modal-body">
+		<h3>タスク概要</h3>
+        <div id="div_summary"></div>
+
+		<h3>対応履歴</h3>
+        <!-- WISWIGエディタのSummerNoteを組み込む --> 
+        <span id="summernote_toggle" class="glyphicon glyphicon-edit">コメントエディタを開く</span>
+<div id="summernote_panel" style="display: none">
+        <div id="summernote"></div>
+        <input type="button" class="btn btn-primary" onClick="registerComment()"　 value="コメント保存"/>
+</div>        
+        <hr>
+        <div id="div_comments"></div>
+      </div>
+      <div class="modal-footer">
+      <hr>
+        <form>
+          <input name="myFile" class="form-control" type="file" />
+          <input type="button" class="btn btn-default" value="アップロード" onclick="uploadAttachement(this.parentNode)"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+/*****************************************************************************
+   画面描画系のスクリプト
+******************************************************************************/
+$(document).ready(function() {
+
+  //modalというクラスを持った要素をモーダルダイアログにする
+  $('.modal').modal({ keyboard: false,
+				   show: true
+  });
+  //modalというクラスを持った要素をドラッグ可能にする
+  $(".modal").draggable({
+	handle: ".modal-header"
+  });
+  
+  $('#summernote_toggle').click( function() {
+    if ( $('#summernote_toggle').text() == 'コメントエディタを開く' ) {
+      //summernoteを起動
+      $('#summernote').summernote({
+        height: 100,
+      });
+      $('#summernote_toggle').text("コメントエディタを閉じる");
+      $('#summernote_panel').toggle();
+    } else {
+      $('#summernote').summernote('destroy');
+      $('#summernote_toggle').text("コメントエディタを開く");
+      $('#summernote_panel').toggle();
+
+    }
+  });
+  
+
+  
+  //SpreadSheetから保存しておいたコメントを読み込み
+  reloadComments();
+  
+});
+
+function reloadComments(){
+    google.script.run
+    //Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
+    .withSuccessHandler(function(result) {
+       $('#div_title').html( result.title ); 
+       $('#div_summary').html( result.summary ); 
+       $('#div_comments').html( result.comments ); 
+    })
+    //Googleサーバスクリプトの実行
+    .loadMySpreadSheet(); 
+}
+
+
+</script>
+
+<script>
+/*****************************************************************************
+   イベント処理系のスクリプト
+******************************************************************************/
+//Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
+function persistData(str){
+  google.script.run
+    .withSuccessHandler(function(result) {
+        //コールバック debug用
+        //document.getElementById("echoArea").value = result.data; 
+    })
+    .updateMySpreadSheet(str); 
+}
+
+
+//コメントを保存する
+function registerComment(){
+  //Summernoteからコメントを抽出する
+  var markupStr = $('#summernote').summernote('code');
+  window.confirm("登録しますか？");    
+  persistData(markupStr);
+      
+  reloadComments();
+}
+
+//ファイルを添付する。Google Driveに保存され、コメントとしてファイルURLが追記される
+function uploadAttachement(myForm){
+  var fileNameInGDrive = "";
+  window.alert("ファイルをアップロードします");
+  google.script.run
+    .withSuccessHandler(function(result) {
+        //debug用
+
+        persistData("添付： <a href='" + result.fileUrl + "'>" + result.fileName + "</a>");
+        window.alert("ファイルアップロード成功しました " + result.fileName); 
+        reloadComments();
+    })
+    .processFileUpload(myForm);
+
+
+  
+}
+</script>
+</body>
+</html>
+

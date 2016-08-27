@@ -8,8 +8,8 @@
 
 <link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
 <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.min.js"></script>
- 
-<div> 
+
+<div>
 <div class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -20,15 +20,15 @@
         <h4 class="modal-title" id="div_title"></h4>
       </div>
       <div class="modal-body">
-		<h3>郢ｧ�ｽｿ郢ｧ�ｽｹ郢ｧ�ｽｯ隶弱ｊ�ｽｦ�ｿｽ</h3>
+		<h3>タスク概要</h3>
         <div id="div_summary"></div>
 
-		<h3>陝��ｽｾ陟｢諛ｷ�ｽｱ�ｽ･雎�ｽｴ</h3>
-        <!-- WISWIG郢ｧ�ｽｨ郢晢ｿｽ郢ｧ�ｽ｣郢ｧ�ｽｿ邵ｺ�ｽｮSummerNote郢ｧ蝣､�ｽｵ�ｿｽ邵ｺ�ｽｿ髴趣ｽｼ郢ｧ�ｿｽ --> 
-        <span id="summernote_toggle" class="glyphicon glyphicon-edit">郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現縺顔ｹ晢ｿｽ郢ｧ�ｽ｣郢ｧ�ｽｿ郢ｧ蟶晏ｹ慕ｸｺ�ｿｽ</span>
+		<h3>対応履歴</h3>
+        <!-- WISWIGエディタのSummerNoteを組み込む --> 
+        <span id="summernote_toggle" class="glyphicon glyphicon-edit">コメントエディタを開く</span>
 <div id="summernote_panel" style="display: none">
         <div id="summernote"></div>
-        <input type="button" class="btn btn-primary" onClick="registerComment()"邵ｲ�ｿｽ value="郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢昜ｺ包ｽｿ譎擾ｽｭ�ｿｽ"/>
+        <input type="button" class="btn btn-primary" onClick="registerComment()"　 value="コメント保存"/>
 </div>        
         <hr>
         <div id="div_comments"></div>
@@ -37,7 +37,7 @@
       <hr>
         <form>
           <input name="myFile" class="form-control" type="file" />
-          <input type="button" class="btn btn-default" value="郢ｧ�ｽ｢郢晢ｿｽ郢晏干ﾎ溽ｹ晢ｽｼ郢晢ｿｽ" onclick="uploadAttachement(this.parentNode)"/>
+          <input type="button" class="btn btn-default" value="アップロード" onclick="uploadAttachement(this.parentNode)"/>
         </form>
       </div>
     </div>
@@ -49,30 +49,30 @@
 
 <script>
 /*****************************************************************************
-   騾包ｽｻ鬮ｱ�ｽ｢隰�蜀怜愛驍会ｽｻ邵ｺ�ｽｮ郢ｧ�ｽｹ郢ｧ�ｽｯ郢晢ｽｪ郢晏干繝ｨ
+   画面描画系のスクリプト
 ******************************************************************************/
 $(document).ready(function() {
 
-  //modal邵ｺ�ｽｨ邵ｺ�ｿｽ邵ｺ�ｿｽ郢ｧ�ｽｯ郢晢ｽｩ郢ｧ�ｽｹ郢ｧ蜻域亜邵ｺ�ｽ｣邵ｺ貅ｯ�ｽｦ竏ｫ�ｽｴ�ｿｽ郢ｧ蛛ｵﾎ皮ｹ晢ｽｼ郢晢ｿｽ郢晢ｽｫ郢晢ｿｽ郢ｧ�ｽ､郢ｧ�ｽ｢郢晢ｽｭ郢ｧ�ｽｰ邵ｺ�ｽｫ邵ｺ蜷ｶ�ｽ�
+  //modalというクラスを持った要素をモーダルダイアログにする
   $('.modal').modal({ keyboard: false,
 				   show: true
   });
-  //modal邵ｺ�ｽｨ邵ｺ�ｿｽ邵ｺ�ｿｽ郢ｧ�ｽｯ郢晢ｽｩ郢ｧ�ｽｹ郢ｧ蜻域亜邵ｺ�ｽ｣邵ｺ貅ｯ�ｽｦ竏ｫ�ｽｴ�ｿｽ郢ｧ蛛ｵ繝ｩ郢晢ｽｩ郢晢ｿｽ郢ｧ�ｽｰ陷ｿ�ｽｯ髢ｭ�ｽｽ邵ｺ�ｽｫ邵ｺ蜷ｶ�ｽ�
+  //modalというクラスを持った要素をドラッグ可能にする
   $(".modal").draggable({
 	handle: ".modal-header"
   });
   
   $('#summernote_toggle').click( function() {
-    if ( $('#summernote_toggle').text() == '郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現縺顔ｹ晢ｿｽ郢ｧ�ｽ｣郢ｧ�ｽｿ郢ｧ蟶晏ｹ慕ｸｺ�ｿｽ' ) {
-      //summernote郢ｧ螳夲ｽｵ�ｽｷ陷搾ｿｽ
+    if ( $('#summernote_toggle').text() == 'コメントエディタを開く' ) {
+      //summernoteを起動
       $('#summernote').summernote({
         height: 100,
       });
-      $('#summernote_toggle').text("郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現縺顔ｹ晢ｿｽ郢ｧ�ｽ｣郢ｧ�ｽｿ郢ｧ蟶晏陶邵ｺ蛟･�ｽ�");
+      $('#summernote_toggle').text("コメントエディタを閉じる");
       $('#summernote_panel').toggle();
     } else {
       $('#summernote').summernote('destroy');
-      $('#summernote_toggle').text("郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現縺顔ｹ晢ｿｽ郢ｧ�ｽ｣郢ｧ�ｽｿ郢ｧ蟶晏ｹ慕ｸｺ�ｿｽ");
+      $('#summernote_toggle').text("コメントエディタを開く");
       $('#summernote_panel').toggle();
 
     }
@@ -80,20 +80,20 @@ $(document).ready(function() {
   
 
   
-  //SpreadSheet邵ｺ荵晢ｽ芽将譎擾ｽｭ蛟･�ｼ�邵ｺ�ｽｦ邵ｺ鄙ｫ�ｼ樒ｸｺ貅倥＆郢晢ｽ｡郢晢ｽｳ郢晏現�ｽ帝坡�ｽｭ邵ｺ�ｽｿ髴趣ｽｼ邵ｺ�ｽｿ
+  //SpreadSheetから保存しておいたコメントを読み込み
   reloadComments();
   
 });
 
 function reloadComments(){
     google.script.run
-    //Google郢ｧ�ｽｵ郢晢ｽｼ郢晁�後○郢ｧ�ｽｯ郢晢ｽｪ郢晏干繝ｨ邵ｺ�ｽｮ陷ｻ�ｽｼ邵ｺ�ｽｳ陷�ｽｺ邵ｺ遉ｼ�ｽｵ蜈域｣｡郢ｧ蛛ｵ縺慕ｹ晢ｽｼ郢晢ｽｫ郢晁�後Ε郢ｧ�ｽｯ邵ｺ�ｽｧ陷ｿ蜉ｱﾂ｢陷ｿ謔ｶ�ｽ�
+    //Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
     .withSuccessHandler(function(result) {
        $('#div_title').html( result.title ); 
        $('#div_summary').html( result.summary ); 
        $('#div_comments').html( result.comments ); 
     })
-    //Google郢ｧ�ｽｵ郢晢ｽｼ郢晁�後○郢ｧ�ｽｯ郢晢ｽｪ郢晏干繝ｨ邵ｺ�ｽｮ陞ｳ貅ｯ�ｽ｡�ｿｽ
+    //Googleサーバスクリプトの実行
     .loadMySpreadSheet(); 
 }
 
@@ -102,39 +102,39 @@ function reloadComments(){
 
 <script>
 /*****************************************************************************
-   郢ｧ�ｽ､郢晏生ﾎｦ郢昜ｺ･�ｿｽ�ｽｦ騾��ｿｽ驍会ｽｻ邵ｺ�ｽｮ郢ｧ�ｽｹ郢ｧ�ｽｯ郢晢ｽｪ郢晏干繝ｨ
+   イベント処理系のスクリプト
 ******************************************************************************/
-//Google郢ｧ�ｽｵ郢晢ｽｼ郢晁�後○郢ｧ�ｽｯ郢晢ｽｪ郢晏干繝ｨ邵ｺ�ｽｮ陷ｻ�ｽｼ邵ｺ�ｽｳ陷�ｽｺ邵ｺ遉ｼ�ｽｵ蜈域｣｡郢ｧ蛛ｵ縺慕ｹ晢ｽｼ郢晢ｽｫ郢晁�後Ε郢ｧ�ｽｯ邵ｺ�ｽｧ陷ｿ蜉ｱﾂ｢陷ｿ謔ｶ�ｽ�
+//Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
 function persistData(str){
   google.script.run
     .withSuccessHandler(function(result) {
-        //郢ｧ�ｽｳ郢晢ｽｼ郢晢ｽｫ郢晁�後Ε郢ｧ�ｽｯ debug騾包ｽｨ
+        //コールバック debug用
         //document.getElementById("echoArea").value = result.data; 
     })
     .updateMySpreadSheet(str); 
 }
 
 
-//郢ｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現�ｽ定将譎擾ｽｭ蛟･笘�郢ｧ�ｿｽ
+//コメントを保存する
 function registerComment(){
-  //Summernote邵ｺ荵晢ｽ臥ｹｧ�ｽｳ郢晢ｽ｡郢晢ｽｳ郢晏現�ｽ定ｬ夲ｽｽ陷�ｽｺ邵ｺ蜷ｶ�ｽ�
+  //Summernoteからコメントを抽出する
   var markupStr = $('#summernote').summernote('code');
-  window.confirm("騾具ｽｻ鬪ｭ�ｽｲ邵ｺ蜉ｱ竏ｪ邵ｺ蜷ｶﾂｰ�ｿｽ�ｽｼ�ｿｽ");    
+  window.confirm("登録しますか？");    
   persistData(markupStr);
       
   reloadComments();
 }
 
-//郢晁ｼ斐＜郢ｧ�ｽ､郢晢ｽｫ郢ｧ蜻茨ｽｷ�ｽｻ闔牙�･笘�郢ｧ荵晢ｿｽ�ｿｽGoogle Drive邵ｺ�ｽｫ闖ｫ譎擾ｽｭ蛟･�ｼ�郢ｧ蠕鯉ｿｽ竏壹＆郢晢ｽ｡郢晢ｽｳ郢晏現竊堤ｸｺ蜉ｱ窶ｻ郢晁ｼ斐＜郢ｧ�ｽ､郢晢ｽｫURL邵ｺ迹夲ｽｿ�ｽｽ髫ｪ蛟･�ｼ�郢ｧ蠕鯉ｽ�
+//ファイルを添付する。Google Driveに保存され、コメントとしてファイルURLが追記される
 function uploadAttachement(myForm){
   var fileNameInGDrive = "";
-  window.alert("郢晁ｼ斐＜郢ｧ�ｽ､郢晢ｽｫ郢ｧ蛛ｵ縺�郢晢ｿｽ郢晏干ﾎ溽ｹ晢ｽｼ郢晏ｳｨ�ｼ�邵ｺ�ｽｾ邵ｺ�ｿｽ");
+  window.alert("ファイルをアップロードします");
   google.script.run
     .withSuccessHandler(function(result) {
-        //debug騾包ｽｨ
+        //debug用
 
-        persistData("雎ｺ�ｽｻ闔牙∞�ｽｼ�ｿｽ <a href='" + result.fileUrl + "'>" + result.fileName + "</a>");
-        window.alert("郢晁ｼ斐＜郢ｧ�ｽ､郢晢ｽｫ郢ｧ�ｽ｢郢晢ｿｽ郢晏干ﾎ溽ｹ晢ｽｼ郢晉判�ｿｽ莉咏ｲ･邵ｺ蜉ｱ竏ｪ邵ｺ蜉ｱ笳� " + result.fileName); 
+        persistData("添付： <a href='" + result.fileUrl + "'>" + result.fileName + "</a>");
+        window.alert("ファイルアップロード成功しました " + result.fileName); 
         reloadComments();
     })
     .processFileUpload(myForm);

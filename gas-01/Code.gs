@@ -13,7 +13,7 @@ var gDriveSpreadSheetId = "1pvZecUnGhvuszyK8UWXFnB3OuPMdmDYC57W6ayWh0Vw";
 function doGet(e) {
   var t = HtmlService.createTemplateFromFile('index');
   return t.evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME);
-  
+   
 }
 
 //ファイルアップロード

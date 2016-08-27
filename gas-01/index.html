@@ -9,7 +9,7 @@
 <link href="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
 <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.min.js"></script>
 
-<div>
+<div> 
 <div class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -20,15 +20,15 @@
         <h4 class="modal-title" id="div_title"></h4>
       </div>
       <div class="modal-body">
-		<h3>タスク概要</h3>
+		<h3>繧ｿ繧ｹ繧ｯ讎りｦ�</h3>
         <div id="div_summary"></div>
 
-		<h3>対応履歴</h3>
-        <!-- WISWIGエディタのSummerNoteを組み込む --> 
-        <span id="summernote_toggle" class="glyphicon glyphicon-edit">コメントエディタを開く</span>
+		<h3>蟇ｾ蠢懷ｱ･豁ｴ</h3>
+        <!-- WISWIG繧ｨ繝�繧｣繧ｿ縺ｮSummerNote繧堤ｵ�縺ｿ霎ｼ繧� --> 
+        <span id="summernote_toggle" class="glyphicon glyphicon-edit">繧ｳ繝｡繝ｳ繝医お繝�繧｣繧ｿ繧帝幕縺�</span>
 <div id="summernote_panel" style="display: none">
         <div id="summernote"></div>
-        <input type="button" class="btn btn-primary" onClick="registerComment()"　 value="コメント保存"/>
+        <input type="button" class="btn btn-primary" onClick="registerComment()"縲� value="繧ｳ繝｡繝ｳ繝井ｿ晏ｭ�"/>
 </div>        
         <hr>
         <div id="div_comments"></div>
@@ -37,7 +37,7 @@
       <hr>
         <form>
           <input name="myFile" class="form-control" type="file" />
-          <input type="button" class="btn btn-default" value="アップロード" onclick="uploadAttachement(this.parentNode)"/>
+          <input type="button" class="btn btn-default" value="繧｢繝�繝励Ο繝ｼ繝�" onclick="uploadAttachement(this.parentNode)"/>
         </form>
       </div>
     </div>
@@ -49,30 +49,30 @@
 
 <script>
 /*****************************************************************************
-   画面描画系のスクリプト
+   逕ｻ髱｢謠冗判邉ｻ縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ
 ******************************************************************************/
 $(document).ready(function() {
 
-  //modalというクラスを持った要素をモーダルダイアログにする
+  //modal縺ｨ縺�縺�繧ｯ繝ｩ繧ｹ繧呈戟縺｣縺溯ｦ∫ｴ�繧偵Δ繝ｼ繝�繝ｫ繝�繧､繧｢繝ｭ繧ｰ縺ｫ縺吶ｋ
   $('.modal').modal({ keyboard: false,
 				   show: true
   });
-  //modalというクラスを持った要素をドラッグ可能にする
+  //modal縺ｨ縺�縺�繧ｯ繝ｩ繧ｹ繧呈戟縺｣縺溯ｦ∫ｴ�繧偵ラ繝ｩ繝�繧ｰ蜿ｯ閭ｽ縺ｫ縺吶ｋ
   $(".modal").draggable({
 	handle: ".modal-header"
   });
   
   $('#summernote_toggle').click( function() {
-    if ( $('#summernote_toggle').text() == 'コメントエディタを開く' ) {
-      //summernoteを起動
+    if ( $('#summernote_toggle').text() == '繧ｳ繝｡繝ｳ繝医お繝�繧｣繧ｿ繧帝幕縺�' ) {
+      //summernote繧定ｵｷ蜍�
       $('#summernote').summernote({
         height: 100,
       });
-      $('#summernote_toggle').text("コメントエディタを閉じる");
+      $('#summernote_toggle').text("繧ｳ繝｡繝ｳ繝医お繝�繧｣繧ｿ繧帝哩縺倥ｋ");
       $('#summernote_panel').toggle();
     } else {
       $('#summernote').summernote('destroy');
-      $('#summernote_toggle').text("コメントエディタを開く");
+      $('#summernote_toggle').text("繧ｳ繝｡繝ｳ繝医お繝�繧｣繧ｿ繧帝幕縺�");
       $('#summernote_panel').toggle();
 
     }
@@ -80,20 +80,20 @@ $(document).ready(function() {
   
 
   
-  //SpreadSheetから保存しておいたコメントを読み込み
+  //SpreadSheet縺九ｉ菫晏ｭ倥＠縺ｦ縺翫＞縺溘さ繝｡繝ｳ繝医ｒ隱ｭ縺ｿ霎ｼ縺ｿ
   reloadComments();
   
 });
 
 function reloadComments(){
     google.script.run
-    //Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
+    //Google繧ｵ繝ｼ繝舌せ繧ｯ繝ｪ繝励ヨ縺ｮ蜻ｼ縺ｳ蜃ｺ縺礼ｵ先棡繧偵さ繝ｼ繝ｫ繝舌ャ繧ｯ縺ｧ蜿励¢蜿悶ｋ
     .withSuccessHandler(function(result) {
        $('#div_title').html( result.title ); 
        $('#div_summary').html( result.summary ); 
        $('#div_comments').html( result.comments ); 
     })
-    //Googleサーバスクリプトの実行
+    //Google繧ｵ繝ｼ繝舌せ繧ｯ繝ｪ繝励ヨ縺ｮ螳溯｡�
     .loadMySpreadSheet(); 
 }
 
@@ -102,39 +102,39 @@ function reloadComments(){
 
 <script>
 /*****************************************************************************
-   イベント処理系のスクリプト
+   繧､繝吶Φ繝亥�ｦ逅�邉ｻ縺ｮ繧ｹ繧ｯ繝ｪ繝励ヨ
 ******************************************************************************/
-//Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
+//Google繧ｵ繝ｼ繝舌せ繧ｯ繝ｪ繝励ヨ縺ｮ蜻ｼ縺ｳ蜃ｺ縺礼ｵ先棡繧偵さ繝ｼ繝ｫ繝舌ャ繧ｯ縺ｧ蜿励¢蜿悶ｋ
 function persistData(str){
   google.script.run
     .withSuccessHandler(function(result) {
-        //コールバック debug用
+        //繧ｳ繝ｼ繝ｫ繝舌ャ繧ｯ debug逕ｨ
         //document.getElementById("echoArea").value = result.data; 
     })
     .updateMySpreadSheet(str); 
 }
 
 
-//コメントを保存する
+//繧ｳ繝｡繝ｳ繝医ｒ菫晏ｭ倥☆繧�
 function registerComment(){
-  //Summernoteからコメントを抽出する
+  //Summernote縺九ｉ繧ｳ繝｡繝ｳ繝医ｒ謚ｽ蜃ｺ縺吶ｋ
   var markupStr = $('#summernote').summernote('code');
-  window.confirm("登録しますか？");    
+  window.confirm("逋ｻ骭ｲ縺励∪縺吶°�ｼ�");    
   persistData(markupStr);
       
   reloadComments();
 }
 
-//ファイルを添付する。Google Driveに保存され、コメントとしてファイルURLが追記される
+//繝輔ぃ繧､繝ｫ繧呈ｷｻ莉倥☆繧九��Google Drive縺ｫ菫晏ｭ倥＆繧後�√さ繝｡繝ｳ繝医→縺励※繝輔ぃ繧､繝ｫURL縺瑚ｿｽ險倥＆繧後ｋ
 function uploadAttachement(myForm){
   var fileNameInGDrive = "";
-  window.alert("ファイルをアップロードします");
+  window.alert("繝輔ぃ繧､繝ｫ繧偵い繝�繝励Ο繝ｼ繝峨＠縺ｾ縺�");
   google.script.run
     .withSuccessHandler(function(result) {
-        //debug用
+        //debug逕ｨ
 
-        persistData("添付： <a href='" + result.fileUrl + "'>" + result.fileName + "</a>");
-        window.alert("ファイルアップロード成功しました " + result.fileName); 
+        persistData("豺ｻ莉假ｼ� <a href='" + result.fileUrl + "'>" + result.fileName + "</a>");
+        window.alert("繝輔ぃ繧､繝ｫ繧｢繝�繝励Ο繝ｼ繝画�仙粥縺励∪縺励◆ " + result.fileName); 
         reloadComments();
     })
     .processFileUpload(myForm);

@@ -34,7 +34,6 @@
    * 1. JAX-RSで、サーバサイド部分のスタブを作成する(JavaEE6以上を使用すること。JAX-RSが搭載されている)
      * jaxrsのリポジトリを参照。サンプルプログラムが掲載されている
    * 2. *.htmlファイル内の以下のJavaScript部分を
-
 ```
     google.script.run
     //Googleサーバスクリプトの呼び出し結果をコールバックで受け取る
@@ -54,6 +53,19 @@
        $('#div_comments').html( result.comments ); 
 	});
 ```
+   * 2. *.html内で外部のファイルを外部サイトからインポートしている場合、
+```
+<script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js '></script>
+<script type="text/javascript" src='//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js'></script>
+```
+   * 以下のようにhttp:を追加する。
+```
+<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js '></script>
+<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js'></script>
+```
+
+
+##ローカルで動かない場合
  * Google Apps ScripがGoogle Sites上で動かない。Javascriptデバッグモードでエラーログを確認すると、"Authorization is required to perform that action"というエラーが出ている。
    *  CORS (クロスオリジンリソースシェアリング)の制限の可能性が高い。以下のページが参考になる。
    *  http://tadtak.jugem.jp/?eid=59

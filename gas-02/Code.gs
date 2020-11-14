@@ -1,11 +1,19 @@
 
 function openDialog() {
-  var html = HtmlService.createHtmlOutputFromFile('index');
-  Logger.log(html);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Dialog title');
+  var html = HtmlService.createHtmlOutputFromFile('index').setHeight(500);
+  SpreadsheetApp.getUi().showModalDialog(html, 'jqGridTableのテスト');
 }
 
+function createEmail(){
+   GmailApp.createDraft("yasuzuki@gmail.com","subject","test mail");
+   
+}
 
+function log(){
+  console.log("aaa");
+  
+}
+  
 /**
   特定のGoogle Sheetのデータを抽出して、JSONにして返却する関数
 **/

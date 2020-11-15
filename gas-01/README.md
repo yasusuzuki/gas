@@ -64,8 +64,10 @@
 ```
 
 
-##ローカルで動かない場合
+## ローカルのJavascriptからサーバサイドの(*.gs)を呼びたい場合
+ * どうしてもスタブを作成するのが大変な場合、ローカルの端末で実行したJavascriptから呼び出すこともできる。ただし、CORSというセキュリティの制約があるため、工夫が必要。
  * Google Apps ScripがGoogle Sites上で動かない。Javascriptデバッグモードでエラーログを確認すると、"Authorization is required to perform that action"というエラーが出ている。
-   *  CORS (クロスオリジンリソースシェアリング)の制限の可能性が高い。以下のページが参考になる。
-   *  http://tadtak.jugem.jp/?eid=59
+   * CORS (クロスオリジンリソースシェアリング)の制限の可能性が高い。以下のページが参考になる。
+   * http://tadtak.jugem.jp/?eid=59
+   * https://qiita.com/riversun/items/c924cfe70e16ee3fe3ba
    *  一番手っ取り早い解決策は、サーバサイドのスタブアプリが常に、HTTPレスポンスヘッダに”Access-Control-Allow-Origin:*”を設定する。JAX-RSでスタブを作成しているのであれば、サーブレットフィルタでHTTPレスポンスヘッダを毎回修正するようにすればよい。

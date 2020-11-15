@@ -33,9 +33,9 @@ $(document).ready(function(){
     google.script.run.withSuccessHandler(loadToTable).readFromGoogleSheet();
   } else {
     var text = [
-      ["001", "あいaaaaaaaaaaaaaaaaああああああ", "か"],
-      ["002", "うえ", "きく"],
-      ["003", "お", "けこ"],
+      ["1000 タスク１","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容１．ああああいいいううう","manager@testmail.com"],
+      ["1002 タスク２","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容２．ああああいいいううう","manager@testmail.com"],
+      ["1003 タスク３","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容３．ああああいいいううう","manager@testmail.com"],
     ];
     loadToTable(JSON.stringify(text));
   }

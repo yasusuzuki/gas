@@ -1,4 +1,3 @@
-
 function openDialog() {
   var html = HtmlService.createHtmlOutputFromFile('index').setHeight(500);
   SpreadsheetApp.getUi().showModalDialog(html, 'リマインドメール送信画面');
@@ -34,21 +33,44 @@ function createEmail( tableDataJSON ){
   特定のGoogle Sheetのデータを抽出して、JSONにして返却する関数
 **/
 function readFromGoogleSheet() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('masterSheet');
-  var range = sheet.getRange(3,1,sheet.getDataRange().getLastRow()-3,4); //3行目から最終行まで。1列目から4列を抽出
-  var rangeValues = [];
-  var lastColumn = range.getNumColumns();
-  var lastRow = range.getNumRows();
-  Logger.log("lastColumn:" + lastColumn + " lastRow:" + lastRow);
-  for ( j = 1 ; j <= lastRow; j++){
-    var row = [];
-    for ( i = 1; i <= lastColumn; i++){
-      row.push(range.getCell(j,i).getValue());
-    };
-    rangeValues.push(row);
-  };
-  return JSON.stringify(rangeValues);
+  var data = [];
+  var contact = [];
+  var sheet_todo = SpreadsheetApp.getActive().getSheetByName("ToDo");
+  var sheet_contact = SpreadsheetApp.getActive().getSheetByName("contact");
+  var data_contact = sheet_contact.getDataRange().getValues();
+  var data_todo = sheet_todo.getDataRange().getValues();
+
+  for (var i = 3; i<data_todo.length; i++) {
+    var subject = "", tos = "", names = "";
+    for (var j=0; j<3;j++){
+      var name = data_todo[2][j+4];
+      if ( data_todo[i][j+4] == "未着手" || data_todo[i][j+4] == "着手済"){
+        names = names + (names == "" ? "" : ",") + name;
+        tos = tos + (tos == "" ? "" : ",") + findEmailByName(name, data_contact);
+      }
+    }    
+    subject = data_todo[i][8];
+    
+    //チェックボックスにチェックがなく、完了していないメンバーが少なくとも１人いるTODOを抽出
+    if ( data_todo[i][0] == false && tos != ""){
+      data.push( [names+subject,tos,subject,"manager@testmai.com"] );
+    }
+  }
+  return JSON.stringify(data);
+
 }
+
+
+
+function findEmailByName(name, data_contact){
+  for( var i = 1; i < data_contact.length;i++){
+    if( name == data_contact[i][0]){
+      return data_contact[i][1];  
+    }
+  }
+  return null;
+}
+
 
 // Google Sheetsに入力さがあるたびに呼ばれるコールバック関数
 // 入力した内容を"log"シートに記録する
@@ -98,3 +120,7 @@ function getCurrentTime(){
   }
   return NowYear + "/" + NowMon + "/" + NowDay + " " + NowHour+":"+NowMin+":"+NowSec;
 }
+
+
+
+    

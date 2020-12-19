@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+<body>
+<!-- CDNから読み込み(http, https省いています) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/jquery-ui.min.js"></script>
+<script src="https://js.cybozu.com/jqgrid/v5.1.1/js/jquery.jqGrid.min.js"></script>
+<script src="https://js.cybozu.com/jqgrid/v5.1.1/js/i18n/grid.locale-en.js"></script>
+<script src="https://js.cybozu.com/jqgrid/v5.1.1/js/i18n/grid.locale-ja.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.19/themes/redmond/jquery-ui.css">
+<link rel="stylesheet" href="https://js.cybozu.com/jqgrid/v5.1.1/css/ui.jqgrid.css">
+
+
+<style type="text/css">
+/* jqGridのセル内を折り返しする */
+.ui-jqgrid tr.jqgrow td {
+  white-space: normal;
+  word-break: break-all;
+}
+</style>
+
+
+
+<script type="text/javascript">
+var DEBUG = true;
+DEBUG = false;
+$(document).ready(function(){
+  if ( DEBUG === false ) {
+    google.script.run.withSuccessHandler(loadToTable).readFromGoogleSheet();
+  } else {
+    var text = [
+      ["1000 タスク１","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容１．ああああいいいううう","manager@testmail.com"],
+      ["1002 タスク２","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容２．ああああいいいううう","manager@testmail.com"],
+      ["1003 タスク３","mike@testmail.com,bob@testmail.com,arthur@testmail.com	","タスクの内容３．ああああいいいううう","manager@testmail.com"],
+    ];
+    loadToTable(JSON.stringify(text));
+  }
+});
+
+  
+function loadToTable(rangeValuesJSON){
+  var rangeValues = JSON.parse(rangeValuesJSON);
+  var JQGRID_TITLE = "Data Table",
+  DISP_ROW_MAX = 100,
+  colArray = [],
+  rowArray = [];
+  
+  colArray.push({name:"radio",  label:"On/Off", width:60, edittype:"checkbox",formatter:"checkbox",editable:true,formatoptions: {disabled : false}});
+  colArray.push({name:"title",  label:"Title", width: 100 });
+  colArray.push({name:"to",     label:"To",  width: 100 });
+  colArray.push({name:"htmlMailBody",   label:"Detail",  width: 100 ,formatter:jqGridCellFormatLink});
+  colArray.push({name:"cc",     label:"Cc",  width: 100 });
+
+  rowArray = rangeValues.map(function(t){
+    return {title:t[0], to:t[1], htmlMailBody:t[2],cc:t[3] };
+  });
+    console.log(rowArray);
+
+  
+  jQuery("#jqGridList").jqGrid({
+    data: rowArray,
+    colModel: colArray,
+    datatype: "local",
+    sortorder: "ASC",
+    multiselect: false,
+    rowNum:DISP_ROW_MAX,
+    excel: true,
+    viewrecords: true,
+    height:300,
+    caption: JQGRID_TITLE
+  });
+}
+
+function jqGridCellFormatLink(cval, opt, rdt){
+  var str = "<a href='http://www.google.com/?cd=" + cval + "' target='_blank'>" + cval + "</a>";
+  return str;
+}
+
+function confirmResultOfCreateEmail(numberOfSuccess){
+  alert("合計"+numberOfSuccess+"件のGmail下書き作成に成功しました");
+
+}
+</script>
+        
+<input type="button" value="Remind" onclick="google.script.run.withSuccessHandler(confirmResultOfCreateEmail).createEmail(JSON.stringify(jQuery('#jqGridList').jqGrid('getRowData')))" />
+<input type="button" value="Close" onclick="google.script.host.close()" />
+
+<table id="jqGridList"> </table>
+
+
+</body>
+</html>
